@@ -1,3 +1,5 @@
+'use strict';
+
 // server.js
 // where your node app starts
 
@@ -14,24 +16,23 @@ app.use(cors({ optionSuccessStatus: 200 })); // some legacy browsers choke on 20
 app.use(express.static('public'));
 
 //Custom logging middleware
-app.use((req, res, next) => {
-    console.log(`${req.method} ${req.path} - ${req.ip}`);
+app.use(function (req, res, next) {
+    console.log(req.method + ' ' + req.path + ' - ' + req.ip);
     next();
-})
+});
 
 // http://expressjs.com/en/starter/basic-routing.html
-app.get("/", function(req, res) {
+app.get("/", function (req, res) {
     res.sendFile(__dirname + '/views/index.html');
 });
 
-
 // your first API endpoint... 
-app.get("/api/hello", function(req, res) {
+app.get("/api/hello", function (req, res) {
     res.json({ greeting: 'hello API' });
 });
 
 // Implementing microservice
-app.get('/api/whoami', (req, res) => {
+app.get('/api/whoami', function (req, res) {
     res.json({
         ipaddress: req.ip,
         language: req.get('Accept-Language'),
@@ -39,9 +40,7 @@ app.get('/api/whoami', (req, res) => {
     });
 });
 
-
-
 // listen for requests :)
-var listener = app.listen(process.env.PORT, function() {
+var listener = app.listen(process.env.PORT, function () {
     console.log('Your app is listening on port ' + listener.address().port);
 });
