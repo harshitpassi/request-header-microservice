@@ -34,7 +34,7 @@ app.get("/api/hello", function (req, res) {
 // Implementing microservice
 app.get('/api/whoami', function (req, res) {
     res.json({
-        ipaddress: req.ip,
+        ipaddress: req.get('X-Forwarded-For').split(',')[0],
         language: req.get('Accept-Language'),
         software: req.get('User-Agent')
     });
